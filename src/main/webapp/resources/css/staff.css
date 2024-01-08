@@ -1,0 +1,18 @@
+#page-header-logo {
+    background: url("../img/logo32x32.png") 0 0;
+}
+#action-button-panel {
+    float: right;
+}
+.single-char-button {
+    min-width: 1em;
+    vertical-align: middle;
+    font-size: 1em;
+}
+#editable-row-table-control-panel button {
+    vertical-align: top;
+}
+#s-footnote {
+    margin: 1em;
+    color: red;
+}

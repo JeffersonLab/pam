@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+  <display-name>Custom Functions</display-name>
+  <tlib-version>2.1</tlib-version>
+  <short-name>staff</short-name>
+  <uri>http://jlab.org/staff/functions</uri>
+  <function>
+    <name>formatStaff</name>
+    <function-class>org.jlab.pam.presentation.util.Functions</function-class>
+    <function-signature>java.lang.String formatStaff(org.jlab.staff.persistence.entity.Staff)</function-signature>
+  </function>
+  <function>
+    <name>formatBoolean</name>
+    <function-class>org.jlab.pam.presentation.util.Functions</function-class>
+    <function-signature>java.lang.String formatBoolean(java.lang.Boolean)</function-signature>
+  </function>
+</taglib>
