@@ -34,6 +34,25 @@ services:
       - ./docker/keycloak:/scripts
     entrypoint: /scripts/docker-entrypoint.sh
 
+  ldap:
+    image: 389ds/dirsrv:2.4
+    hostname: ldap
+    container_name: ldap
+    ports:
+      - "3389:3389"
+    healthcheck:
+      test: ["CMD", "/usr/lib/dirsrv/dscontainer", "-H"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    environment:
+      DS_DM_PASSWORD: password
+      DS_SUFFIX_NAME: dc=example,dc=com
+    volumes:
+      - ./docker/ldap:/scripts
+    entrypoint: /scripts/docker-entrypoint.sh
+
   mailhog:
     image: mailhog/mailhog:v1.0.1
     hostname: mailhog

@@ -9,6 +9,11 @@ services:
       file: deps.yml
       service: keycloak
 
+  ldap:
+    extends:
+      file: deps.yml
+      service: ldap
+
   mailhog:
     extends:
       file: deps.yml
