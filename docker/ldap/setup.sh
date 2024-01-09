@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## Note: we rely on "standard" LDAP schemas as defined in /usr/share/dirsrv/schema
+
 dsconf localhost backend create --suffix="dc=example,dc=com" --be-name="example"
 
 # We must wait for dsconf to finish.  It apparently returns before server is actually ready for following ldapadds
@@ -40,6 +42,6 @@ echo "Adding ops management group"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
 dn: cn=opsmngd,dc=example,dc=com
 cn: opsmngd
-objectclass: groupOfUniqueNames
-uniquemember: uid=jdoe,ou=People,dc=example,dc=com
+objectclass: groupOfNames
+member: uid=jdoe,ou=People,dc=example,dc=com
 EOF
