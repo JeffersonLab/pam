@@ -17,6 +17,7 @@ echo "| Step 2: Wait for dirsrv to start |"
 echo "------------------------------------"
 
 # until ldapwhoami -H ldap://ldap:3389 -x | grep -q "anonymous";
+# until dsctl --json slapd-localhost healthcheck | grep -q "[]";
 until /usr/lib/dirsrv/dscontainer -H;
 do
   echo $(date) " Still waiting for ${HOSTNAME} to start..."

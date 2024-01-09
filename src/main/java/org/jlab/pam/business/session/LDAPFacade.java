@@ -64,7 +64,7 @@ public class LDAPFacade extends AbstractFacade<Workgroup> {
     public List<Workgroup> findOpsRoles() throws NamingException {
         List<Workgroup> roleList = new ArrayList<>();
 
-        final String groupBase = System.getenv("LDAP_GROUP_PATH");
+        final String groupBase = System.getenv("LDAP_GROUP_SUFFIX");
         final String opsManagedCn = System.getenv("LDAP_OPS_MANAGED_CN");
 
         LdapContext ctx = connect();
@@ -104,7 +104,7 @@ public class LDAPFacade extends AbstractFacade<Workgroup> {
     public Workgroup findGroupByCn(String cn) throws NamingException {
         Workgroup group = null;
 
-        final String ldapBase = System.getenv("LDAP_GROUP_PATH");
+        final String ldapBase = System.getenv("LDAP_GROUP_SUFFIX");
 
         LdapContext ctx = connect();
 
@@ -134,8 +134,8 @@ public class LDAPFacade extends AbstractFacade<Workgroup> {
     public List<Staff> findStaffByGroupCn(String cn) throws NamingException {
         List<Staff> staffList = new ArrayList<>();
 
-        final String groupBase = System.getenv("LDAP_GROUP_PATH");
-        final String userBase = System.getenv("LDAP_USER_PATH");
+        final String groupBase = System.getenv("LDAP_GROUP_SUFFIX");
+        final String userBase = System.getenv("LDAP_USER_SUFFIX");
 
         LdapContext ctx = connect();
 

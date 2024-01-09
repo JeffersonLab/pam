@@ -40,6 +40,7 @@ services:
     container_name: ldap
     ports:
       - "3389:3389"
+      - "3636:3636"
     healthcheck:
       test: ["CMD", "/usr/lib/dirsrv/dscontainer", "-H"]
       interval: 10s
