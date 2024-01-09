@@ -1,0 +1,3 @@
+services:
+  pam:
+    image: jeffersonlab/pam:3.0.0
