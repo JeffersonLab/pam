@@ -30,9 +30,6 @@ ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
 dn: uid=jdoe,ou=People,dc=example,dc=com
 uid: jdoe
 givenName: John
-objectClass: top
-objectClass: person
-objectClass: organizationalPerson
 objectClass: inetorgperson
 sn: Doe
 cn: John Doe
