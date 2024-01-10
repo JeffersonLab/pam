@@ -1,0 +1,12 @@
+services:
+  ipa:
+    image: freeipa/freeipa-server:centos-9-stream-4.11.0
+    hostname: ipa.example.com
+    container_name: ipa
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    environment:
+      PASSWORD: Secret123
+    volumes:
+      - ./docker/freeipa:/scripts
+    entrypoint: /scripts/docker-entrypoint.sh
