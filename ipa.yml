@@ -1,3 +1,4 @@
+# Note: Windows users must enable systemd support: https://learn.microsoft.com/en-us/windows/wsl/wsl-config#systemd-support
 services:
   ipa:
     image: freeipa/freeipa-server:rocky-9-4.10.2
