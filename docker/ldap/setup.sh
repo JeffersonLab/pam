@@ -8,26 +8,49 @@ dsconf localhost backend create --suffix="dc=example,dc=com" --be-name="example"
 # TODO: maybe use: dsctl --json slapd-localhost healthcheck
 sleep 5
 
-echo "Adding OU example"
+SUFFIX="dc=example,dc=com"
+
+# Add structure
+echo "Adding example dcObject"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
 dn: dc=example,dc=com
 dc: example
 objectClass: dcObject
-objectClass: organizationalUnit
-ou: example
 EOF
 
-echo "Adding OU People"
+# We are simulating freeipa LDAP so need freeipa flat schema
+# See freeipa/install/share/bootstrap-template.ldif
+echo "Adding accounts nsContainer"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
-dn: ou=People,dc=example,dc=com
+dn: cn=accounts,$SUFFIX
+changetype: add
 objectClass: top
-objectClass: organizationalUnit
-ou: People
+objectClass: nsContainer
+cn: accounts
 EOF
 
+echo "Adding users nsContainer"
+ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
+dn: cn=users,cn=accounts,$SUFFIX
+changetype: add
+objectClass: top
+objectClass: nsContainer
+cn: users
+EOF
+
+echo "Adding groups nsContainer"
+ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
+dn: cn=groups,cn=accounts,$SUFFIX
+changetype: add
+objectClass: top
+objectClass: nsContainer
+cn: groups
+EOF
+
+## Now add some entries
 echo "Adding User jdoe"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
-dn: uid=jdoe,ou=People,dc=example,dc=com
+dn: uid=jdoe,cn=users,cn=accounts,dc=example,dc=com
 uid: jdoe
 givenName: John
 objectClass: inetorgperson
@@ -37,7 +60,7 @@ EOF
 
 echo "Adding ops management group"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
-dn: cn=opsmngd,dc=example,dc=com
+dn: cn=opsmngd,cn=groups,cn=accounts,dc=example,dc=com
 cn: opsmngd
 objectclass: groupOfNames
 member: uid=jdoe,ou=People,dc=example,dc=com
