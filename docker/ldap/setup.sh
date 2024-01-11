@@ -19,7 +19,7 @@ objectClass: dcObject
 EOF
 
 # We are simulating freeipa LDAP so need freeipa flat schema
-# See freeipa/install/share/bootstrap-template.ldif
+# See https://github.com/freeipa/freeipa/blob/master/install/share/bootstrap-template.ldif
 echo "Adding accounts nsContainer"
 ldapadd -D "cn=Directory Manager" -w password -H ldap://ldap:3389 -x <<EOF
 dn: cn=accounts,$SUFFIX
