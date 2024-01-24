@@ -20,7 +20,7 @@
         </style>
     </jsp:attribute>
     <jsp:attribute name="scripts">
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/v${initParam.resourceVersionNumber}/js/group.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/v${initParam.releaseNumber}/js/group.js"></script>
     </jsp:attribute>        
     <jsp:body>
         <div class="breadbox">

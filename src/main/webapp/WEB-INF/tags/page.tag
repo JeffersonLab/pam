@@ -4,12 +4,13 @@
 <%@taglib prefix="s" uri="http://jlab.org/jsp/smoothness"%>
 <%@attribute name="title"%>
 <%@attribute name="category"%>
+<%@attribute name="description"%>
 <%@attribute name="stylesheets" fragment="true"%>
 <%@attribute name="scripts" fragment="true"%>
 <%@attribute name="secondaryNavigation" fragment="true"%>
-<s:tabbed-page title="${title}" category="${category}" keycloakClientIdKey="KEYCLOAK_CLIENT_ID_STAFF" resourceLocation="CDN">
+<s:tabbed-page title="${title}" category="${category}" description="${description}">
     <jsp:attribute name="stylesheets">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/v${initParam.resourceVersionNumber}/css/staff.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/v${initParam.releaseNumber}/css/staff.css"/>
         <jsp:invoke fragment="stylesheets"/>
     </jsp:attribute>
     <jsp:attribute name="scripts">
