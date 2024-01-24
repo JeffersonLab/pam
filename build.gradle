@@ -14,6 +14,8 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    implementation 'org.wildfly.security:wildfly-elytron:1.19.1.Final'
+
     // No matter what smoothness weblib MUST be included in WAR (https://github.com/JeffersonLab/smoothness/issues/4)
     implementation 'org.jlab:smoothness-weblib:4.3.0'
 

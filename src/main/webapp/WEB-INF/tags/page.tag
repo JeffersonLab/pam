@@ -18,6 +18,15 @@
     </jsp:attribute>
     <jsp:attribute name="primaryNavigation">
                     <ul>
+                        <li${fn:startsWith(currentPath, '/profile') ? ' class="current-primary"' : ''}>
+                            <a href="${pageContext.request.contextPath}/profile">Profile</a>
+                        </li>
+                        <li${fn:startsWith(currentPath, '/password') ? ' class="current-primary"' : ''}>
+                            <a href="${pageContext.request.contextPath}/password">Password</a>
+                        </li>
+                        <li${fn:startsWith(currentPath, '/reset') ? ' class="current-primary"' : ''}>
+                            <a href="${pageContext.request.contextPath}/reset">Reset</a>
+                        </li>
                         <li${fn:startsWith(currentPath, '/role') ? ' class="current-primary"' : ''}>
                             <a href="${pageContext.request.contextPath}/roles">Roles</a>
                         </li>
