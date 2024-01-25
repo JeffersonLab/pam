@@ -2,7 +2,7 @@ package org.jlab.pam.presentation.controller;
 
 import org.wildfly.security.auth.server.SecurityDomain;
 import org.wildfly.security.auth.server.SecurityIdentity;
-import org.wildfly.security.authz.Attributes;
+import org.wildfly.security.http.oidc.IDToken;
 import org.wildfly.security.http.oidc.OidcSecurityContext;
 
 import javax.servlet.ServletException;
@@ -36,14 +36,10 @@ public class Profile extends HttpServlet {
             throws ServletException, IOException {
 
         OidcSecurityContext context = (OidcSecurityContext) request.getAttribute(OidcSecurityContext.class.getName());
+        IDToken idToken =  null;
 
         if(context != null) {
-            System.out.println("AccessToken: " + context.getTokenString());
-            System.out.println("Given Name: " + context.getToken().getGivenName());
-            System.out.println("Family Name: " + context.getToken().getFamilyName());
-            System.out.println("IDToken: " + context.getIDTokenString());
-            System.out.println("Given Name: " + context.getIDToken().getGivenName());
-            System.out.println("Family Name: " + context.getIDToken().getFamilyName());
+            idToken = context.getIDToken();
         }
 
         SecurityDomain domain = SecurityDomain.getCurrent();
@@ -56,17 +52,7 @@ public class Profile extends HttpServlet {
 
         roleList.sort(String.CASE_INSENSITIVE_ORDER);
 
-        Attributes attributes = identity.getAttributes();
-
-        for(Attributes.Entry e: attributes.entries()) {
-            System.out.print(e.getKey());
-            System.out.print("=");
-            System.out.print(e.getClass().getSimpleName());
-            System.out.print(";");
-            System.out.println(e);
-        }
-
-
+        request.setAttribute("idToken", idToken);
         request.setAttribute("roleList", roleList);
 
         request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);

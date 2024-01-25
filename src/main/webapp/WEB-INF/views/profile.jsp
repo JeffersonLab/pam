@@ -5,19 +5,27 @@
 <c:set var="title" value="Profile"/>
 <t:page title="${title}">
     <jsp:attribute name="stylesheets">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/v${initParam.releaseNumber}/css/help.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/v${initParam.releaseNumber}/css/profile.css"/>
     </jsp:attribute>
     <jsp:attribute name="scripts">
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resources/v${initParam.releaseNumber}/js/help.js"></script>
     </jsp:attribute>
     <jsp:body>
         <section>
-            <h2>Roles</h2>
-            <ul>
-                <c:forEach items="${roleList}" var="role">
-                    <li><c:out value="${role}"/></li>
-                </c:forEach>
-            </ul>
+            <h2><c:out value="${title}"/></h2>
+            <dl>
+                <dt>Name: </dt>
+                <dd><c:out value="${idToken.name}"/></dd>
+                <dt>Email: </dt>
+                <dd><c:out value="${idToken.email}"/></dd>
+                <dt>Roles: </dt>
+                <dd>
+                    <ul>
+                        <c:forEach items="${roleList}" var="role">
+                            <li><c:out value="${role}"/></li>
+                        </c:forEach>
+                    </ul>
+                </dd>
+            </dl>
         </section>
     </jsp:body>
 </t:page>
