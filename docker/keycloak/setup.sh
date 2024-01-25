@@ -1,5 +1,14 @@
 #!/bin/bash
 
+KEYCLOAK_DEBUG='["true"]'
+KEYCLOAK_LDAP_CONNECTION_URL='["ldap://ldap:3389"]'
+KEYCLOAK_USERS_DN='["cn=users,cn=accounts,dc=example,dc=com"]'
+KEYCLOAK_BIND_DN='["cn=Directory Manager"]'
+KEYCLOAK_BIND_CREDENTIAL='["password"]'
+KEYCLOAK_USER_OBJECT_CLASSES='["person","organizationalPerson","inetorgperson"]'
+KEYCLOAK_KERBEROS_AUTHN='["false"]'
+KEYCLOAK_KERBEROS_FOR_PASS='["false"]'
+
 if [[ -z "${KEYCLOAK_HOME}" ]]; then
     echo "Skipping Keycloak Setup: Must provide KEYCLOAK_HOME in environment"
     return 0
@@ -45,32 +54,54 @@ echo "| Step B: Create Realm |"
 echo "------------------------"
 ${KEYCLOAK_HOME}/bin/kcadm.sh create realms -s realm="${KEYCLOAK_REALM}" -s enabled=true -o
 
-echo "------------------------"
-echo "| Step C: Create Roles |"
-echo "------------------------"
-${KEYCLOAK_HOME}/bin/kcadm.sh create roles -r "${KEYCLOAK_REALM}" -s name=${KEYCLOAK_RESOURCE}-user
-${KEYCLOAK_HOME}/bin/kcadm.sh create roles -r "${KEYCLOAK_REALM}" -s name=${KEYCLOAK_RESOURCE}-admin
-
 echo "-------------------------"
-echo "| Step D: Create Client |"
+echo "| Step C: Create Client |"
 echo "-------------------------"
 ${KEYCLOAK_HOME}/bin/kcadm.sh create clients -r "${KEYCLOAK_REALM}" -s clientId=${KEYCLOAK_RESOURCE} -s 'redirectUris=["https://localhost:8443/'${KEYCLOAK_RESOURCE}'/*"]' -s secret=${KEYCLOAK_SECRET} -s 'serviceAccountsEnabled=true'
 ${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername service-account-${KEYCLOAK_RESOURCE} --cclientid realm-management --rolename view-users
 ${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername service-account-${KEYCLOAK_RESOURCE} --cclientid realm-management --rolename view-authorization
 ${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername service-account-${KEYCLOAK_RESOURCE} --cclientid realm-management --rolename view-realm
 
-echo "------------------------"
-echo "| Step E: Create Users |"
-echo "------------------------"
-${KEYCLOAK_HOME}/bin/kcadm.sh create users -r "${KEYCLOAK_REALM}" -s username=jadams -s firstName=Jane -s lastName=Adams -s email=jadams@example.com -s enabled=true
-${KEYCLOAK_HOME}/bin/kcadm.sh set-password -r "${KEYCLOAK_REALM}" --username jadams --new-password password
-${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername jadams --rolename ${KEYCLOAK_RESOURCE}-user
+echo "----------------------------------------"
+echo "| Step D: Create LDAP Storage Provider |"
+echo "----------------------------------------"
+${KEYCLOAK_HOME}/bin/kcadm.sh create components -r ${KEYCLOAK_REALM} -s parentId=${KEYCLOAK_REALM} \
+-s id=${KEYCLOAK_REALM}-ldap-provider -s name=${KEYCLOAK_REALM}-ldap-provider \
+-s providerId=ldap -s providerType=org.keycloak.storage.UserStorageProvider \
+-s config.debug=${KEYCLOAK_DEBUG} \
+-s config.authType='["simple"]' \
+-s config.vendor='["rhds"]' \
+-s config.priority='["0"]' \
+-s config.connectionUrl=${KEYCLOAK_LDAP_CONNECTION_URL} \
+-s config.editMode='["READ_ONLY"]' \
+-s config.usersDn=${KEYCLOAK_USERS_DN} \
+-s config.serverPrincipal='[""]' \
+-s config.bindDn="${KEYCLOAK_BIND_DN}" \
+-s config.bindCredential=${KEYCLOAK_BIND_CREDENTIAL} \
+-s 'config.fullSyncPeriod=["86400"]' \
+-s 'config.changedSyncPeriod=["-1"]' \
+-s 'config.cachePolicy=["NO_CACHE"]' \
+-s config.evictionDay=[] \
+-s config.evictionHour=[] \
+-s config.evictionMinute=[] \
+-s config.maxLifespan=[] \
+-s config.importEnabled='["true"]' \
+-s 'config.batchSizeForSync=["1000"]' \
+-s 'config.syncRegistrations=["false"]' \
+-s 'config.usernameLDAPAttribute=["uid"]' \
+-s 'config.rdnLDAPAttribute=["uid"]' \
+-s 'config.uuidLDAPAttribute=["uid"]' \
+-s config.userObjectClasses="${KEYCLOAK_USER_OBJECT_CLASSES}" \
+-s 'config.searchScope=["1"]' \
+-s 'config.useTruststoreSpi=["ldapsOnly"]' \
+-s 'config.connectionPooling=["true"]' \
+-s 'config.pagination=["true"]' \
+-s config.allowKerberosAuthentication=${KEYCLOAK_KERBEROS_AUTHN} \
+-s config.keyTab='[""]' \
+-s config.kerberosRealm='[""]' \
+-s config.useKerberosForPasswordAuthentication=${KEYCLOAK_KERBEROS_FOR_PASS}
 
-${KEYCLOAK_HOME}/bin/kcadm.sh create users -r "${KEYCLOAK_REALM}" -s username=jsmith -s firstName=John -s lastName=Smith -s email=jsmith@example.com -s enabled=true
-${KEYCLOAK_HOME}/bin/kcadm.sh set-password -r "${KEYCLOAK_REALM}" --username jsmith --new-password password
-${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername jsmith --rolename ${KEYCLOAK_RESOURCE}-user
-
-${KEYCLOAK_HOME}/bin/kcadm.sh create users -r "${KEYCLOAK_REALM}" -s username=tbrown -s firstName=Tom -s lastName=Brown -s email=tbrown@example.com -s enabled=true
-${KEYCLOAK_HOME}/bin/kcadm.sh set-password -r "${KEYCLOAK_REALM}" --username tbrown --new-password password
-${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername tbrown --rolename ${KEYCLOAK_RESOURCE}-user
-${KEYCLOAK_HOME}/bin/kcadm.sh add-roles -r "${KEYCLOAK_REALM}" --uusername tbrown --rolename ${KEYCLOAK_RESOURCE}-admin
+echo "----------------------"
+echo "| Step E: Sync Users |"
+echo "----------------------"
+${KEYCLOAK_HOME}/bin/kcadm.sh create -r ${KEYCLOAK_REALM} user-storage/${KEYCLOAK_REALM}-ldap-provider/sync?action=triggerFullSync
