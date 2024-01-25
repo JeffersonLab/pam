@@ -1,4 +1,4 @@
-package org.jlab.pam.presentation.controller.setup;
+package org.jlab.pam.presentation.controller.directory;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -12,19 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jlab.smoothness.presentation.util.Paginator;
 import org.jlab.smoothness.presentation.util.ParamUtil;
-import org.jlab.pam.business.session.StaffFacade;
-import org.jlab.pam.persistence.entity.Staff;
+import org.jlab.pam.business.session.WorkgroupFacade;
+import org.jlab.pam.persistence.entity.Workgroup;
 import org.jlab.pam.presentation.util.FilterSelectionMessage;
 
 /**
  *
  * @author ryans
  */
-@WebServlet(name = "Users", urlPatterns = {"/setup/users"})
-public class Users extends HttpServlet {
+@WebServlet(name = "Groups", urlPatterns = {"/directory/groups"})
+public class Groups extends HttpServlet {
 
     @EJB
-    StaffFacade staffFacade;
+    WorkgroupFacade groupFacade;
 
     /**
      * Handles the HTTP
@@ -39,15 +39,13 @@ public class Users extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String firstname = request.getParameter("firstname");
-        String lastname = request.getParameter("lastname");
-        String username = request.getParameter("username");
+        String name = request.getParameter("name");
 
         int offset = ParamUtil.convertAndValidateNonNegativeInt(request, "offset", 0);
         int max = 10;
 
-        List<Staff> staffList = staffFacade.filterList(username, firstname, lastname, null, null, offset, max);
-        long totalRecords = staffFacade.countList(username, firstname, lastname, null, null, offset, max);
+        List<Workgroup> groupList = groupFacade.filterList(name, null, null, offset, max);
+        long totalRecords = groupFacade.countList(name, null, null, offset, max);
 
         Paginator paginator = new Paginator(totalRecords, offset, max);
 
@@ -56,23 +54,23 @@ public class Users extends HttpServlet {
         String selectionMessage;
 
         if (paginator.getTotalRecords() == 0) {
-            selectionMessage = "Found 0 Staff";
+            selectionMessage = "Found 0 Groups";
         } else {
-            selectionMessage = "Showing Staff " + formatter.format(paginator.getStartNumber())
+            selectionMessage = "Showing Group " + formatter.format(paginator.getStartNumber())
                     + " - " + formatter.format(paginator.getEndNumber())
                     + " of " + formatter.format(paginator.getTotalRecords());
         }
 
-        String filters = FilterSelectionMessage.getMessage(null, username, firstname, lastname, null, null);
+        String filters = FilterSelectionMessage.getMessage(name, null, null, null, null, null);
 
         if (filters.length() > 0) {
             selectionMessage = selectionMessage + " with " + filters;
         }
 
         request.setAttribute("selectionMessage", selectionMessage);
-        request.setAttribute("staffList", staffList);
+        request.setAttribute("groupList", groupList);
         request.setAttribute("paginator", paginator);
 
-        request.getRequestDispatcher("/WEB-INF/views/setup/users.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/directory/groups.jsp").forward(request, response);
     }
 }

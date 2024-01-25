@@ -1,7 +1,6 @@
-package org.jlab.pam.presentation.controller.setup;
+package org.jlab.pam.presentation.controller.directory;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.ejb.EJB;
@@ -12,26 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jlab.smoothness.presentation.util.Paginator;
-import org.jlab.smoothness.presentation.util.ParamConverter;
 import org.jlab.smoothness.presentation.util.ParamUtil;
 import org.jlab.pam.business.session.StaffFacade;
-import org.jlab.pam.business.session.WorkgroupFacade;
 import org.jlab.pam.persistence.entity.Staff;
-import org.jlab.pam.persistence.entity.Workgroup;
 import org.jlab.pam.presentation.util.FilterSelectionMessage;
 
 /**
  *
  * @author ryans
  */
-@WebServlet(name = "User", urlPatterns = {"/setup/user"})
-public class User extends HttpServlet {
+@WebServlet(name = "Users", urlPatterns = {"/directory/users"})
+public class Users extends HttpServlet {
 
     @EJB
-    WorkgroupFacade groupFacade;
-    @EJB
     StaffFacade staffFacade;
-    
+
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -45,20 +39,16 @@ public class User extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        BigInteger staffId = ParamConverter.convertBigInteger(request, "staffId");
+        String firstname = request.getParameter("firstname");
+        String lastname = request.getParameter("lastname");
+        String username = request.getParameter("username");
 
         int offset = ParamUtil.convertAndValidateNonNegativeInt(request, "offset", 0);
         int max = 10;
 
-        List<Workgroup> groupList = groupFacade.filterList(null, null, staffId, offset, max);
-        long totalRecords = groupFacade.countList(null, null, staffId, offset, max);
+        List<Staff> staffList = staffFacade.filterList(username, firstname, lastname, null, null, offset, max);
+        long totalRecords = staffFacade.countList(username, firstname, lastname, null, null, offset, max);
 
-        Staff staff = null;
-        
-        if(staffId != null) {
-            staff = staffFacade.find(staffId);
-        }
-        
         Paginator paginator = new Paginator(totalRecords, offset, max);
 
         DecimalFormat formatter = new DecimalFormat("###,###");
@@ -66,24 +56,23 @@ public class User extends HttpServlet {
         String selectionMessage;
 
         if (paginator.getTotalRecords() == 0) {
-            selectionMessage = "Found 0 Groups";
+            selectionMessage = "Found 0 Users";
         } else {
-            selectionMessage = "Showing Group " + formatter.format(paginator.getStartNumber())
+            selectionMessage = "Showing User " + formatter.format(paginator.getStartNumber())
                     + " - " + formatter.format(paginator.getEndNumber())
                     + " of " + formatter.format(paginator.getTotalRecords());
         }
 
-        String filters = FilterSelectionMessage.getMessage(null, null, null, null, null, staff);
+        String filters = FilterSelectionMessage.getMessage(null, username, firstname, lastname, null, null);
 
-        /*if (filters.length() > 0) {
+        if (filters.length() > 0) {
             selectionMessage = selectionMessage + " with " + filters;
-        }*/
+        }
 
-        request.setAttribute("staff", staff);
         request.setAttribute("selectionMessage", selectionMessage);
-        request.setAttribute("groupList", groupList);
+        request.setAttribute("staffList", staffList);
         request.setAttribute("paginator", paginator);
 
-        request.getRequestDispatcher("/WEB-INF/views/setup/user.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/directory/users.jsp").forward(request, response);
     }
 }

@@ -5,7 +5,7 @@
 <%@attribute name="title" %>
 <%@attribute name="stylesheets" fragment="true" %>
 <%@attribute name="scripts" fragment="true" %>
-<t:page title="${title}" category="Setup">
+<t:page title="${title}" category="Directory">
     <jsp:attribute name="stylesheets">
         <jsp:invoke fragment="stylesheets"/>
     </jsp:attribute>
@@ -14,11 +14,11 @@
     </jsp:attribute>
     <jsp:attribute name="secondaryNavigation">
                         <ul>
-                            <li${fn:startsWith(currentPath, '/setup/user') ? ' class="current-secondary"' : ''}>
-                                <a href="${pageContext.request.contextPath}/setup/users">Users (Cache)</a>
+                            <li${fn:startsWith(currentPath, '/directory/user') ? ' class="current-secondary"' : ''}>
+                                <a href="${pageContext.request.contextPath}/directory/users">Users</a>
                             </li>
-                            <li${fn:startsWith(currentPath, '/setup/group') ? ' class="current-secondary"' : ''}>
-                                <a href="${pageContext.request.contextPath}/setup/groups">Groups (Cache)</a>
+                            <li${fn:startsWith(currentPath, '/directory/group') ? ' class="current-secondary"' : ''}>
+                                <a href="${pageContext.request.contextPath}/directory/groups">Groups</a>
                             </li>
                         </ul>
     </jsp:attribute>

@@ -21,19 +21,9 @@
                         <li${fn:startsWith(currentPath, '/profile') ? ' class="current-primary"' : ''}>
                             <a href="${pageContext.request.contextPath}/profile">Profile</a>
                         </li>
-                        <li${fn:startsWith(currentPath, '/password') ? ' class="current-primary"' : ''}>
-                            <a href="${pageContext.request.contextPath}/password">Password</a>
+                        <li${fn:startsWith(currentPath, '/directory') ? ' class="current-primary"' : ''}><a
+                                    href="${pageContext.request.contextPath}/directory/users">Directory</a>
                         </li>
-                        <li${fn:startsWith(currentPath, '/reset') ? ' class="current-primary"' : ''}>
-                            <a href="${pageContext.request.contextPath}/reset">Reset</a>
-                        </li>
-                        <li${fn:startsWith(currentPath, '/role') ? ' class="current-primary"' : ''}>
-                            <a href="${pageContext.request.contextPath}/roles">Roles</a>
-                        </li>
-                        <c:if test="${pageContext.request.isUserInRole('pam-admin')}">
-                            <li${fn:startsWith(currentPath, '/setup') ? ' class="current-primary"' : ''}><a
-                                    href="${pageContext.request.contextPath}/setup/users">Setup</a></li>
-                            </c:if>
                         <li${'/help' eq currentPath ? ' class="current-primary"' : ''}>
                             <a href="${pageContext.request.contextPath}/help">Help</a>
                         </li>

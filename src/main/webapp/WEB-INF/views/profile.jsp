@@ -17,7 +17,7 @@
                 <dd><c:out value="${idToken.name}"/></dd>
                 <dt>Email: </dt>
                 <dd><c:out value="${idToken.email}"/></dd>
-                <dt>Roles: </dt>
+                <dt>Groups: </dt>
                 <dd>
                     <ul>
                         <c:forEach items="${roleList}" var="role">

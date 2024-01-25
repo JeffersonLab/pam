@@ -4,8 +4,8 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="s" uri="http://jlab.org/jsp/smoothness"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%> 
-<c:set var="title" value="Users (Cache)"/>
-<t:setup-page title="${title}">
+<c:set var="title" value="Users"/>
+<t:directory-page title="${title}">
     <jsp:attribute name="stylesheets">
     </jsp:attribute>
     <jsp:attribute name="scripts"> 
@@ -56,25 +56,21 @@
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th>Staff ID</th>
-                        <th>Lastname</th>
-                        <th>Firstname</th>
-                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${staffList}" var="staff">
+                    <c:forEach items="${userList}" var="user">
                         <tr>
                             <td>
                                 <form method="get" action="user">
-                                    <input type="hidden" name="staffId" value="${staff.staffId}"/>
+                                    <input type="hidden" name="username" value="${user.username}"/>
                                     <button class="single-char-button" type="submit">&rarr;</button>
                                 </form>
                             </td>
-                            <td><c:out value="${staff.staffId}"/></td>
-                            <td><c:out value="${staff.lastname}"/></td>
-                            <td><c:out value="${staff.firstname}"/></td>
-                            <td><c:out value="${staff.username}"/></td>
+                            <td><c:out value="${user.name}"/></td>
+                            <td><c:out value="${user.email}"/></td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -83,4 +79,4 @@
             <button id="next-button" type="button" data-offset="${paginator.nextOffset}" value="Next"${paginator.next ? '' : ' disabled="disabled"'}>Next</button>
         </section>
     </jsp:body>         
-</t:setup-page>
+</t:directory-page>

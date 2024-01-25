@@ -4,8 +4,8 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="s" uri="http://jlab.org/jsp/smoothness"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%> 
-<c:set var="title" value="Groups (Cache)"/>
-<t:setup-page title="${title}">
+<c:set var="title" value="Groups"/>
+<t:directory-page title="${title}">
     <jsp:attribute name="stylesheets">    
     </jsp:attribute>
     <jsp:attribute name="scripts"> 
@@ -42,7 +42,6 @@
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th>Group ID</th>
                         <th>Name</th>
                         <th>Description</th>  
                     </tr>
@@ -56,7 +55,6 @@
                                     <button class="single-char-button" type="submit">&rarr;</button>
                                 </form>
                             </td>
-                            <td><c:out value="${group.workgroupId}"/></td>
                             <td><c:out value="${group.name}"/></td>
                             <td><c:out value="${group.description}"/></td>
                         </tr>
@@ -94,4 +92,4 @@
             </form>
         </div>
     </jsp:body>         
-</t:setup-page>
+</t:directory-page>

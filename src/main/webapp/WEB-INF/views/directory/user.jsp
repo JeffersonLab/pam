@@ -5,7 +5,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%> 
 <%@taglib prefix="jlab" uri="http://jlab.org/staff/functions"%>
 <c:set var="title" value="${jlab:formatStaff(staff)}"/>
-<t:setup-page title="${title}">
+<t:directory-page title="${title}">
     <jsp:attribute name="stylesheets">        
     </jsp:attribute>
     <jsp:attribute name="scripts"> 
@@ -102,4 +102,4 @@
             </form>
         </div>
     </jsp:body>         
-</t:setup-page>
+</t:directory-page>

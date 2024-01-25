@@ -5,7 +5,7 @@
 <%@taglib prefix="s" uri="http://jlab.org/jsp/smoothness"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%> 
 <c:set var="title" value="${group.name}"/>
-<t:setup-page title="${title}">
+<t:directory-page title="${title}">
     <jsp:attribute name="stylesheets">     
         <style type="text/css">
             #batch-input {
@@ -122,4 +122,4 @@
             </form>
         </div>            
     </jsp:body>         
-</t:setup-page>
+</t:directory-page>

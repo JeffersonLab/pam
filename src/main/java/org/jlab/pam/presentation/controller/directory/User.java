@@ -1,6 +1,7 @@
-package org.jlab.pam.presentation.controller.setup;
+package org.jlab.pam.presentation.controller.directory;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.List;
 import javax.ejb.EJB;
@@ -11,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jlab.smoothness.presentation.util.Paginator;
+import org.jlab.smoothness.presentation.util.ParamConverter;
 import org.jlab.smoothness.presentation.util.ParamUtil;
+import org.jlab.pam.business.session.StaffFacade;
 import org.jlab.pam.business.session.WorkgroupFacade;
+import org.jlab.pam.persistence.entity.Staff;
 import org.jlab.pam.persistence.entity.Workgroup;
 import org.jlab.pam.presentation.util.FilterSelectionMessage;
 
@@ -20,12 +24,14 @@ import org.jlab.pam.presentation.util.FilterSelectionMessage;
  *
  * @author ryans
  */
-@WebServlet(name = "Groups", urlPatterns = {"/setup/groups"})
-public class Groups extends HttpServlet {
+@WebServlet(name = "User", urlPatterns = {"/setup/user"})
+public class User extends HttpServlet {
 
     @EJB
     WorkgroupFacade groupFacade;
-
+    @EJB
+    StaffFacade staffFacade;
+    
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -39,14 +45,20 @@ public class Groups extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String name = request.getParameter("name");
+        BigInteger staffId = ParamConverter.convertBigInteger(request, "staffId");
 
         int offset = ParamUtil.convertAndValidateNonNegativeInt(request, "offset", 0);
         int max = 10;
 
-        List<Workgroup> groupList = groupFacade.filterList(name, null, null, offset, max);
-        long totalRecords = groupFacade.countList(name, null, null, offset, max);
+        List<Workgroup> groupList = groupFacade.filterList(null, null, staffId, offset, max);
+        long totalRecords = groupFacade.countList(null, null, staffId, offset, max);
 
+        Staff staff = null;
+        
+        if(staffId != null) {
+            staff = staffFacade.find(staffId);
+        }
+        
         Paginator paginator = new Paginator(totalRecords, offset, max);
 
         DecimalFormat formatter = new DecimalFormat("###,###");
@@ -61,16 +73,17 @@ public class Groups extends HttpServlet {
                     + " of " + formatter.format(paginator.getTotalRecords());
         }
 
-        String filters = FilterSelectionMessage.getMessage(name, null, null, null, null, null);
+        String filters = FilterSelectionMessage.getMessage(null, null, null, null, null, staff);
 
-        if (filters.length() > 0) {
+        /*if (filters.length() > 0) {
             selectionMessage = selectionMessage + " with " + filters;
-        }
+        }*/
 
+        request.setAttribute("staff", staff);
         request.setAttribute("selectionMessage", selectionMessage);
         request.setAttribute("groupList", groupList);
         request.setAttribute("paginator", paginator);
 
-        request.getRequestDispatcher("/WEB-INF/views/setup/groups.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/setup/user.jsp").forward(request, response);
     }
 }

@@ -1,4 +1,4 @@
-package org.jlab.pam.presentation.controller.setup;
+package org.jlab.pam.presentation.controller.directory;
 
 import java.io.IOException;
 import java.math.BigInteger;
