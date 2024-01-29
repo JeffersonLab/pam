@@ -1,7 +1,8 @@
 #!/bin/bash
 
+KEYCLOAK_REALM_DISPLAY_NAME="TEST REALM"
 KEYCLOAK_DEBUG='["true"]'
-KEYCLOAK_LDAP_CONNECTION_URL='["ldap://ldap:3389"]'
+KEYCLOAK_LDAP_CONNECTION_URL='["ldap://dirsrv:3389"]'
 KEYCLOAK_USERS_DN='["cn=users,cn=accounts,dc=example,dc=com"]'
 KEYCLOAK_BIND_DN='["cn=Directory Manager"]'
 KEYCLOAK_BIND_CREDENTIAL='["password"]'
@@ -52,7 +53,7 @@ ${KEYCLOAK_HOME}/bin/kcadm.sh config credentials --server "${KEYCLOAK_SERVER_URL
 echo "------------------------"
 echo "| Step B: Create Realm |"
 echo "------------------------"
-${KEYCLOAK_HOME}/bin/kcadm.sh create realms -s realm="${KEYCLOAK_REALM}" -s enabled=true -o
+${KEYCLOAK_HOME}/bin/kcadm.sh create realms -s id=${KEYCLOAK_REALM} -s realm="${KEYCLOAK_REALM}" -s enabled=true -s displayName="${KEYCLOAK_REALM_DISPLAY_NAME}" -s loginWithEmailAllowed=false
 
 echo "-------------------------"
 echo "| Step C: Create Client |"

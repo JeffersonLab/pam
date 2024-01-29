@@ -9,10 +9,10 @@ services:
       file: deps.yml
       service: keycloak
 
-  ldap:
+  dirsrv:
     extends:
       file: deps.yml
-      service: ldap
+      service: dirsrv
 
   mailhog:
     extends:

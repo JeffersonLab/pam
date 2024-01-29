@@ -12,32 +12,26 @@ services:
     volumes:
       - ./docker/oracle/setup:/container-entrypoint-initdb.d
 
-  ldap:
-    image: 389ds/dirsrv:2.4
-    hostname: ldap
-    container_name: ldap
+  dirsrv:
+    image: jeffersonlab/dirsrv:1.0.0
+    hostname: dirsrv
+    container_name: dirsrv
     ports:
       - "3389:3389"
       - "3636:3636"
-    healthcheck:
-      test: ["CMD", "/usr/lib/dirsrv/dscontainer", "-H"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 120s
     environment:
       DS_DM_PASSWORD: password
       DS_SUFFIX_NAME: dc=example,dc=com
+      DS_BACKEND_NAME: example
     volumes:
-      - ./docker/ldap:/scripts
-    entrypoint: /scripts/docker-entrypoint.sh
+      - ./docker/dirsrv/setup:/docker-entrypoint-initdb.d
 
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.5
     hostname: keycloak
     container_name: keycloak
     depends_on:
-      ldap:
+      dirsrv:
         condition: service_healthy
     ports:
       - "8081:8080"
