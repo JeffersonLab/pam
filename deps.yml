@@ -27,7 +27,7 @@ services:
       - ./docker/dirsrv/setup:/docker-entrypoint-initdb.d
 
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0.5
+    image: jeffersonlab/keycloak:1.0.1
     hostname: keycloak
     container_name: keycloak
     depends_on:
@@ -42,14 +42,9 @@ services:
       KEYCLOAK_FRONTEND_HOSTNAME: 'localhost'
       KEYCLOAK_FRONTEND_PORT: '8081'
       KEYCLOAK_SERVER_URL: 'http://keycloak:8080'
-      KEYCLOAK_HOME: '/opt/keycloak'
-      KEYCLOAK_REALM: 'test-realm'
-      KEYCLOAK_RESOURCE: 'pam'
-      KEYCLOAK_SECRET: 'yHi6W2raPmLvPXoxqMA7VWbLAA2WN0eB'
       TZ: 'America/New_York'
     volumes:
-      - ./docker/keycloak:/scripts
-    entrypoint: /scripts/docker-entrypoint.sh
+      - ./docker/keycloak/setup:/docker-entrypoint-initdb.d
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
