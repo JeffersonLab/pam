@@ -27,7 +27,7 @@ services:
       - ./docker/dirsrv/setup:/docker-entrypoint-initdb.d
 
   keycloak:
-    image: jeffersonlab/keycloak:1.0.1
+    image: jeffersonlab/keycloak:1.1.1
     hostname: keycloak
     container_name: keycloak
     depends_on:
@@ -44,7 +44,7 @@ services:
       KEYCLOAK_SERVER_URL: 'http://keycloak:8080'
       TZ: 'America/New_York'
     volumes:
-      - ./docker/keycloak/setup:/docker-entrypoint-initdb.d
+      - ./docker/keycloak/setup:/container-entrypoint-initdb.d
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
