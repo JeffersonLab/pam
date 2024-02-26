@@ -10,7 +10,7 @@ services:
       ORACLE_PASSWORD: testing
       TZ: 'America/New_York'
     volumes:
-      - ./docker/oracle/setup:/container-entrypoint-initdb.d
+      - ./container/oracle/initdb.d:/container-entrypoint-initdb.d
 
   dirsrv:
     image: jeffersonlab/dirsrv:1.0.0
@@ -24,7 +24,7 @@ services:
       DS_SUFFIX_NAME: dc=example,dc=com
       DS_BACKEND_NAME: example
     volumes:
-      - ./docker/dirsrv/setup:/docker-entrypoint-initdb.d
+      - ./container/dirsrv/initdb.d:/docker-entrypoint-initdb.d
 
   keycloak:
     image: jeffersonlab/keycloak:1.1.1
@@ -44,7 +44,7 @@ services:
       KEYCLOAK_SERVER_URL: 'http://keycloak:8080'
       TZ: 'America/New_York'
     volumes:
-      - ./docker/keycloak/setup:/container-entrypoint-initdb.d
+      - ./container/keycloak/initdb.d:/container-entrypoint-initdb.d
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
