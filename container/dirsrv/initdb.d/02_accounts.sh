@@ -7,6 +7,7 @@ dn: uid=tbrown,cn=users,cn=accounts,${DS_SUFFIX_NAME}
 uid: tbrown
 givenName: Tom
 objectClass: inetorgperson
+objectClass: inetuser
 sn: Brown
 cn: Tom Brown
 EOF
@@ -17,6 +18,7 @@ dn: uid=jdoe,cn=users,cn=accounts,${DS_SUFFIX_NAME}
 uid: jdoe
 givenName: John
 objectClass: inetorgperson
+objectClass: inetuser
 sn: Doe
 cn: John Doe
 EOF
@@ -35,8 +37,6 @@ changetype: modify
 add: member
 member: uid=jdoe,cn=users,cn=accounts,${DS_SUFFIX_NAME}
 EOF
-
-# TODO: memberOf https://www.port389.org/docs/389ds/design/memberof-plugin.html
 
 # Set test password
 ldapmodify -D "cn=Directory Manager" -w ${DS_DM_PASSWORD} -H ldap://localhost:3389 -x <<EOF
